@@ -67,6 +67,7 @@ export const config = {
       return session;
     },
   },
+  
 } satisfies NextAuthConfig;
 
 export const { handlers, auth, signIn, signOut } = NextAuth(config);
