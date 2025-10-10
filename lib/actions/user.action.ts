@@ -5,7 +5,7 @@ import { signIn, signOut } from "@/auth";
 import { isRedirectError } from "next/dist/client/components/redirect-error";
 import { hashSync } from "bcrypt-ts-edge";
 import { prisma } from "@/db/prisma";
-import { email, object, success } from "zod";
+import { formatError } from "../utils";
 
 // Sign in the user with credentials
 export async function signInWithCredentials(
@@ -39,21 +39,28 @@ export async function signUpUser(prev: unknown, formData: FormData) {
   try {
 
     console.log(Object.fromEntries(formData.entries()))
-    const {
-      success,
-      data: user,
-      error,
-    } = signUpFormSchema.safeParse({
+    // const {
+    //   success,
+    //   data: user,
+    //   error,
+    // } = signUpFormSchema.safeParse({
+    //   name: formData.get("name"),
+    //   email: formData.get("email"),
+    //   password: formData.get("password"),
+    //   confirmPassword: formData.get("confirmPassword"),
+    // });
+
+    const user = signUpFormSchema.parse({
       name: formData.get("name"),
       email: formData.get("email"),
       password: formData.get("password"),
       confirmPassword: formData.get("confirmPassword"),
     });
 
-    if (!success) {
-      console.log(error)
-      return { success: false, message: JSON.stringify(error, null, 2) };
-    }
+    // if (!success) {
+    //   console.log(error)
+    //   return { success: false, message: JSON.stringify(error, null, 2) };
+    // }
 
     const hashedPassword = hashSync(user.password, 10);
 
@@ -75,10 +82,14 @@ export async function signUpUser(prev: unknown, formData: FormData) {
       message: "User registered successfully",
     };
   } catch (error) {
+
+    console.log("error", error)
     if (isRedirectError(error)) {
       throw error;
+
     }
-    console.log(error);
-    return { success: false, message: "Registration failed" };
+    
+
+    return { success: false, message: formatError(error) };
   }
 }
