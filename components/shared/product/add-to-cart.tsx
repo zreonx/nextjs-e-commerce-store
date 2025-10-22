@@ -12,16 +12,16 @@ const AddToCart = ({ item }: { item: CartItem }) => {
   const handleAddToCart = async () => {
     const response = await addItemToCart(item);
 
-    if (!response.success) {
-      toast.error(response.message);
+    if (!response?.success) {
+      toast.error(response?.message);
       return;
     }
 
     // Handle success add to cart
     toast.message(null, {
       description: (
-        <div className="flex gap-0.5">
-          <p>{item.name} added to cart</p>
+        <div className='flex gap-0.5'>
+          <p>{response.message}</p>
           <Button onClick={() => router.push("/cart")}>Go to cart</Button>
         </div>
       ),
