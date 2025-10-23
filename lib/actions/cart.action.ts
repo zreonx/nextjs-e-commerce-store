@@ -1,6 +1,6 @@
 "use server";
 
-import { CartItem } from "@/types";
+import { Cart, CartItem } from "@/types";
 import { cookies } from "next/headers";
 import { convertToPlainObject, formatError, round2 } from "../utils";
 import { auth } from "@/auth";
@@ -145,7 +145,7 @@ export async function getMyCart() {
     ...cart,
     items: cart.items as CartItem[],
     itemsPrice: cart.itemsPrice.toString(),
-    totalPrice: cart.totalPrice.toString,
+    totalPrice: cart.totalPrice.toString(),
     shippingPrice: cart.shippingPrice.toString(),
     taxPrice: cart.taxPrice.toString(),
   });
