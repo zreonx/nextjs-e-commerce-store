@@ -37,8 +37,7 @@ export async function signOutUser() {
 // Sign up user
 export async function signUpUser(prev: unknown, formData: FormData) {
   try {
-
-    console.log(Object.fromEntries(formData.entries()))
+    console.log(Object.fromEntries(formData.entries()));
     // const {
     //   success,
     //   data: user,
@@ -82,14 +81,24 @@ export async function signUpUser(prev: unknown, formData: FormData) {
       message: "User registered successfully",
     };
   } catch (error) {
-
-    console.log("error", error)
+    console.log("error", error);
     if (isRedirectError(error)) {
       throw error;
-
     }
-    
 
     return { success: false, message: formatError(error) };
   }
+}
+
+// Get user by id
+export async function getUserById(userId: string) {
+  const user = await prisma.user.findFirst({
+    where: {
+      id: userId,
+    },
+  });
+
+  if (!user) throw new Error("User not found");
+
+  return user;
 }

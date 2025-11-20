@@ -72,7 +72,7 @@ export const config = {
     },
 
     async jwt({ token, user, trigger, session }: any) {
-      console.log("jwt", token);
+      // console.log("jwt", token);
       // Assign user fields to token
       if (user) {
         token.role = user.role;
