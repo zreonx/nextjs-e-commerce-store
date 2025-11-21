@@ -3,9 +3,9 @@ export const APP_DESCRIPTION =  process.env.NEXT_PUBLIC_APP_DESCRIPTION || 'A mo
 export const SERVER_URL = process.env.NEXT_PUBLIC_SERVER_URL || 'http://localhost:3000';
 export const LATEST_PRODUCTS_LIMIT = Number(process.env.LATEST_PRODUCTS_LIMIT) || 4;
 export const shippingAddressDefaultValue = {
-    fullName: 'John Doe',
-    streetAddress: '123 Main st',
+    fullName: '',
+    streetAddress: '',
     city: 'Anytown',
-    postalCode: '1234',
-    country: 'PH'
+    postalCode: '',
+    country: ''
 }

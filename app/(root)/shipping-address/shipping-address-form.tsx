@@ -2,9 +2,13 @@
 
 import { ShippingAddress } from "@/types";
 import { useRouter } from "next/navigation";
-import { useSonner } from "sonner";
+import { toast } from "sonner";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ControllerRenderProps, useForm } from "react-hook-form";
+import {
+  ControllerRenderProps,
+  useForm,
+  SubmitHandler,
+} from "react-hook-form";
 import { z } from "zod";
 import { shippingAddressSchema } from "@/lib/validators";
 import { shippingAddressDefaultValue } from "@/lib/constants";
@@ -21,10 +25,10 @@ import {
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Loader } from "lucide-react";
+import { updateUserAddress } from "@/lib/actions/user.action";
 
 const ShippingAddressForm = ({ address }: { address: ShippingAddress }) => {
   const router = useRouter();
-  const { toasts } = useSonner();
 
   const form = useForm<z.infer<typeof shippingAddressSchema>>({
     resolver: zodResolver(shippingAddressSchema),
@@ -33,8 +37,19 @@ const ShippingAddressForm = ({ address }: { address: ShippingAddress }) => {
 
   const [isPending, startTransition] = useTransition();
 
-  const onSubmit = (values: z.infer<typeof shippingAddressSchema>) => {
-    console.log(values)
+  const onSubmit: SubmitHandler<z.infer<typeof shippingAddressSchema>> = async (
+    values
+  ) => {
+    startTransition(async () => {
+      const res = await updateUserAddress(values);
+
+      if (!res.success) {
+        toast.error(res.message);
+        return;
+      }
+
+      router.push("/payment-method");
+    });
   };
   return (
     <>
@@ -166,7 +181,8 @@ const ShippingAddressForm = ({ address }: { address: ShippingAddress }) => {
                   <Loader className='w-4 h-4 animate-spin' />
                 ) : (
                   <ArrowRight className='w-4 h-4' />
-                )} Continue
+                )}{" "}
+                Continue
               </Button>
             </div>
           </form>
