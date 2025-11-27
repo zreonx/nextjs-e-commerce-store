@@ -45,7 +45,6 @@ const PaymentMethodForm = ({
         toast.success(res.message);
         return;
       }
-
       router.push("/place-order");
     });
   };
